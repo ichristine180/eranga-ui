@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getFdoc } from "../redux/Public";
 import AddFdoc from "./addFdocModal";
-
+import { Buffer } from "buffer";
 const Ibyarangishijwe = () => {
   const dispatch = useDispatch();
   const publicDoc = useSelector(({ publicDoc }) => publicDoc);
@@ -27,15 +27,7 @@ const Ibyarangishijwe = () => {
           {" "}
           Rangisha
         </span>
-        <span
-          className="link"
-          onClick={() => {
-            console.log("got here");
-          }}
-        >
-          {" "}
-          Tanga Itangazo
-        </span>
+        <Itangazo />
       </div>
       <p className="title">Ibyangombwa byatoraguwe</p>
       <div className="row">
@@ -47,6 +39,12 @@ const Ibyarangishijwe = () => {
               </React.Fragment>
             );
           })}
+
+        {publicDoc.fdoc.length == 0 && (
+          <p className="alert alert-warning">
+            Ntabyangombwa bibashije kuboneka! <Itangazo />
+          </p>
+        )}
       </div>
       <AddFdoc show={show} onHide={handleClose} />
     </div>
@@ -54,9 +52,19 @@ const Ibyarangishijwe = () => {
 };
 
 const Card = ({ item }) => {
+  let imgSrc;
+  if (item.doc_image)
+    imgSrc = new Buffer.from(item.doc_image.data.data).toString("base64");
+
   return (
     <div className="card col-3 mt-5 mx-5">
-      <img src="..." className="card-img-top" alt="..." />
+      {imgSrc && (
+        <img
+          src={`data:image/png;base64,${imgSrc}`}
+          className="card-img-top doc-image"
+          alt="..."
+        />
+      )}
       <div className="card-body">
         <h5 className="card-title">
           Owner: {item.owner_first_name} {item.owner_last_name}
@@ -75,5 +83,17 @@ const Card = ({ item }) => {
     </div>
   );
 };
-
+const Itangazo = (props) => {
+  return (
+    <span
+      className="link"
+      onClick={() => {
+        console.log("got here");
+      }}
+    >
+      {" "}
+      Tanga Itangazo
+    </span>
+  );
+};
 export default Ibyarangishijwe;
