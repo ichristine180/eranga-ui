@@ -7,6 +7,9 @@ const slice = createSlice({
     fdoc: [],
     ldoc: [],
     isLoading: false,
+    isLoggedIn: false,
+    user: {},
+    error: null,
   },
   reducers: {
     fdocSuccess: (state, action) => {
@@ -18,12 +21,27 @@ const slice = createSlice({
     loading: (state, action) => {
       state.isLoading = action.payload;
     },
+    createSuccess: (state, action) => {
+      state.message = action.payload;
+    },
+    loginSuccess: (state, action) => {
+      state.isLoggedIn = action.payload.isLoggedIn;
+      state.user = action.payload.user;
+    },
+    fail: (state, action) => {
+      state.error = action.payload;
+    },
+    logout: (state, action) => {
+      state.isLoggedIn = false;
+      state.user = {};
+    },
   },
 });
 export default slice.reducer;
 
 // Actions
-const { fdocSuccess, ldocSuccess, loading } = slice.actions;
+const { fdocSuccess, loginSuccess, loading, createSuccess, fail,logout } =
+  slice.actions;
 export const getFdoc = (status) => async (dispatch) => {
   try {
     dispatch(loading(true));
@@ -35,4 +53,43 @@ export const getFdoc = (status) => async (dispatch) => {
   } catch (e) {
     return console.error(e.message);
   }
+};
+export const saveFdoc = (data) => async (dispatch) => {
+  try {
+    dispatch(loading(true));
+    const res = await axios.post(`http://localhost:4001/api/fdoc/create`, data);
+    dispatch(loading(false));
+    dispatch(createSuccess(res.data.message));
+  } catch (e) {
+    return console.error(e.message);
+  }
+};
+/*admin  actions*/
+export const login =
+  ({ email, password }) =>
+  async (dispatch) => {
+    try {
+      dispatch(loading(true));
+      const res = await axios.post(`http://localhost:4001/api/login`, {
+        email,
+        password,
+      });
+      dispatch(loading(false));
+      if (!res.data.error)
+        dispatch(
+          loginSuccess({
+            user: res.data.result,
+            isLoggedIn: true,
+          })
+        );
+      else dispatch(fail(res.data.message));
+    } catch (e) {
+      dispatch(loading(false));
+      dispatch(fail(e.message));
+      return console.error(e.message);
+    }
+  };
+
+export const logoutA = () => async (dispatch) => {
+  dispatch(logout())
 };

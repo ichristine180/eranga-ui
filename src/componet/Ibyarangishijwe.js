@@ -40,7 +40,7 @@ const Ibyarangishijwe = () => {
             );
           })}
 
-        {publicDoc.fdoc.length == 0 && (
+        {publicDoc.fdoc.length === 0 && (
           <p className="alert alert-warning">
             Ntabyangombwa bibashije kuboneka! <Itangazo />
           </p>

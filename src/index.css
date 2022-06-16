@@ -29,8 +29,8 @@ code {
   margin-left: 1rem;
   color: white;
   font-size: 40px;
-
   font-weight: bold;
+  cursor: pointer;
 }
 
 .items {
@@ -69,6 +69,14 @@ a {
   font-size: larger;
   font-weight: 900;
 }
+.title-admin {
+  padding: 50px;
+  font-size: 40px;
+  font-weight: 900;
+  border-bottom: 1px solid #1f1f44;
+  width: 600px;
+  border-radius: 30%;
+}
 .overlay {
   position: fixed;
   top: 0;
@@ -78,7 +86,9 @@ a {
   background: rgba(96, 88, 88, 0.6);
   z-index: 10000;
 }
-
+body {
+  background-color: #f1f1f1 !important;
+}
 /****************
  * LOAD SPINNER
  ****************/
@@ -193,4 +203,10 @@ a {
 .doc-image {
   max-width: 500px;
   max-height: 300px;
+}
+.pull-right {
+  float: right;
+}
+.pull-left {
+  float: left;
 }
