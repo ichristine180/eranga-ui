@@ -15,7 +15,7 @@ const Login = () => {
   const loginHandler = () => {
     dispatch(login({ email, password }));
   };
-  const error =  useSelector(({ publicDoc }) => publicDoc).error;
+  const error = useSelector(({ publicDoc }) => publicDoc).error;
   return (
     <div className="limiter">
       <div className="container-login100">
@@ -86,15 +86,20 @@ const Login = () => {
 
 export default Login;
 
-const validateEmail = (email, setEmailError) => {
+export const validateEmail = (email, setEmailError) => {
   const validRegex =
     /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   if (!email) {
-    setEmailError("Email is required to login");
-    return;
+    setEmailError("Email is required");
+    return false;
   }
-  if (email.match(validRegex)) setEmailError("");
-  else setEmailError("Email is invalid (exapmle@abc.xx)");
+  if (email.match(validRegex)) {
+    setEmailError("");
+    return true;
+  } else {
+    setEmailError("Email is invalid (exapmle@abc.xx)");
+    return false;
+  }
 };
 
 const validatePassWord = (password, setPasswordError) => {

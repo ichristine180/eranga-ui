@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getFdoc } from "../redux/Public";
+import { getFdoc, viewFoundContact } from "../redux/Public";
 import AddFdoc from "./addFdocModal";
 import { Buffer } from "buffer";
+import { Button, Modal } from "react-bootstrap";
+import { validateEmail } from "./admin/login";
 const Ibyarangishijwe = () => {
   const dispatch = useDispatch();
   const publicDoc = useSelector(({ publicDoc }) => publicDoc);
   useEffect(() => {
-    dispatch(getFdoc("submitted"));
+    dispatch(getFdoc("published"));
   }, [dispatch]);
   const [show, setShow] = useState(false);
   const handleClose = () => {
@@ -20,7 +22,9 @@ const Ibyarangishijwe = () => {
         <p>
           E-ranga ni urubuga ruhuza uwataye ibyangombwa na nyir'i ibyangombwa,
           aho rwemerera uwabitaye kuba yatanga itangazo, ndetse nuwabitoye kuba
-          yabirangisha.
+          yabirangisha. kurangisha icyangombwa yaba kuwagitoye cyangwa uwagitaye
+          nubuntu, ariko kuwateye icyangombwa kugira ngo ubone numero zuwagitoye
+          wishyura amafaranga 1000
         </p>
 
         <span className="link" onClick={() => setShow(true)}>
@@ -55,7 +59,7 @@ const Card = ({ item }) => {
   let imgSrc;
   if (item.doc_image)
     imgSrc = new Buffer.from(item.doc_image.data.data).toString("base64");
-
+  const [show, setShow] = useState(false);
   return (
     <div className="card col-3 mt-5 mx-5">
       {imgSrc && (
@@ -73,16 +77,90 @@ const Card = ({ item }) => {
         <button
           className="btn btn-primary"
           onClick={() => {
-            console.log(item._id);
+            setShow(true);
           }}
         >
           {" "}
           Reba numero zu wabitoye!
         </button>
       </div>
+      <ViewContact show={show} onHide={() => setShow(false)} id={item._id} />
     </div>
   );
 };
+const ViewContact = (props) => {
+  const [mobile, setMobile] = useState("");
+  const [email, setEmail] = useState("");
+  const [error, setError] = useState("");
+  const dispatch = useDispatch();
+  const send = () => {
+    if (validate(mobile, email, setError)) {
+      dispatch(
+        viewFoundContact({
+          owner_mobile: mobile,
+          owner_email: email,
+          id: props.id,
+        })
+      );
+      props.onHide();
+    }
+  };
+  return (
+    <Modal {...props} backdrop="static" keyboard={false}>
+      <Modal.Header closeButton>
+        <Modal.Title>Kubona Numero zuwatoye ibyangombwa</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <>
+          <p className="text-danger text-center">{error}</p>
+          <div className="mb-3">
+            <label htmlFor="exampleInputEmail1" className="form-label">
+              Email
+            </label>
+            <input
+              type="email"
+              className="form-control"
+              id="exampleInputEmail1"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </div>
+          <div className="mb-3">
+            <label htmlFor="exampleInputEmail1" className="form-label">
+              Mobile
+            </label>
+            <input
+              type="text"
+              className="form-control"
+              id="exampleInputEmail1"
+              value={mobile}
+              onChange={(e) => setMobile(e.target.value)}
+            />
+          </div>
+          <div className="mb-3">
+            <label htmlFor="exampleInputEmail1" className="form-label">
+              Amafaranga ugomba kwishyura
+            </label>
+            <input
+              type="number"
+              className="form-control"
+              id="exampleInputEmail1"
+              value="1000"
+              disabled={true}
+            />
+          </div>
+          <Button variant="secondary" onClick={() => props.onHide()}>
+            Cancel
+          </Button>
+          <Button variant="primary pull-right" onClick={() => send()}>
+            Send
+          </Button>
+        </>
+      </Modal.Body>
+    </Modal>
+  );
+};
+
 const Itangazo = (props) => {
   return (
     <span
@@ -95,5 +173,21 @@ const Itangazo = (props) => {
       Tanga Itangazo
     </span>
   );
+};
+
+const validate = (mobile, email, setError) => {
+  if (validateEmail(email, setError)) {
+    if (
+      (mobile.startsWith("078") ||
+        mobile.startsWith("079") ||
+        mobile.startsWith("073") ||
+        mobile.startsWith("072")) &&
+      mobile.length === 10
+    ) {
+      setError();
+      return true;
+    } else setError("Mobile number is not valid(07XXXXXXXX)");
+  }
+  return false;
 };
 export default Ibyarangishijwe;

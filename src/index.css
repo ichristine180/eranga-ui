@@ -71,7 +71,7 @@ a {
 }
 .title-admin {
   padding: 50px;
-  font-size: 40px;
+  font-size: 20px;
   font-weight: 900;
   border-bottom: 1px solid #1f1f44;
   width: 600px;
@@ -209,4 +209,7 @@ body {
 }
 .pull-left {
   float: left;
+}
+.img{
+  max-height: 100px;
 }

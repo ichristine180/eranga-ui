@@ -9,12 +9,14 @@ import 'bootstrap/dist/css/bootstrap.css';
 import { store } from "./redux/store";
 import { Provider } from "react-redux";
 import Spinner from "./componet/spinner";
+import Notification from "./componet/Notification";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <Provider store={store}>
   <Router>
   <Header />
   <Spinner />
+  <Notification />
   <App />
 </Router>
 </Provider>
