@@ -126,6 +126,7 @@ const Form = (props) => {
           Document Picture
         </label>
         <input
+          //enctype="multipart/form-data"
           type="file"
           className="form-control"
           id="exampleInputPassword1"

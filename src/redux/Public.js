@@ -75,9 +75,15 @@ export const getFdoc = (status) => async (dispatch) => {
 export const clear = () => (dispatch) => dispatch(clearMessage());
 // saving found document
 export const saveFdoc = (data) => async (dispatch) => {
+  console.log(data);
   try {
     dispatch(loading(true));
-    const res = await axios.post(`http://localhost:4001/api/fdoc/create`, data);
+    const res = await axios({
+      method: "post",
+      url: "http://localhost:4001/api/fdoc/create",
+      data: data,
+      headers: { "Content-Type": "multipart/form-data" },
+    });
     dispatch(loading(false));
     if (!res.data.error)
       dispatch(
