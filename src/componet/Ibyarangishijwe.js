@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import './Ibyarangishijwe.css'
+import img1 from '../assets/doc.jpg'
 import { useDispatch, useSelector } from "react-redux";
 import { getFdoc, viewFoundContact } from "../redux/Public";
 import AddFdoc from "./addFdocModal";
@@ -16,7 +18,10 @@ const Ibyarangishijwe = () => {
     setShow(false);
   };
   return (
-    <div className="container">
+
+    <div className="container-fluid d-flex justify-content-center">        
+      <div className="col-md-8">
+      <div className="container">
       <div className="alert alert-primary mt-5">
         <h4>Incamake kuri E-RANGA</h4>
         <p>
@@ -26,12 +31,22 @@ const Ibyarangishijwe = () => {
           nubuntu, ariko kuwateye icyangombwa kugira ngo ubone numero zuwagitoye
           wishyura amafaranga 1000
         </p>
-
+        <hr />
+        <p className="p">
+        E-ranga ni urubuga ruhuza uwataye ibyangombwa na nyir'i ibyangombwa,
+          aho rwemerera uwabitaye kuba yatanga itangazo, ndetse nuwabitoye kuba
+          yabirangisha. kurangisha icyangombwa yaba kuwagitoye cyangwa uwagitaye
+          nubuntu, ariko kuwateye icyangombwa kugira ngo ubone numero zuwagitoye
+          wishyura amafaranga 1000
+        </p>
+        
+        
         <span className="link" onClick={() => setShow(true)}>
           {" "}
           Rangisha
         </span>
         <Itangazo />
+      </div>
       </div>
       <p className="title">Ibyangombwa byatoraguwe</p>
       <div className="row">
@@ -52,6 +67,30 @@ const Ibyarangishijwe = () => {
       </div>
       <AddFdoc show={show} onHide={handleClose} />
     </div>
+
+     
+
+        <div className="col-md-4 m-t-50">
+            <div className='card text-center shadow'>
+          <div className="overflow">
+            <img src={img1} alt="Image" className='card-img-top' />
+          </div>
+          <div className="car text-dark">
+            <h4 className="card-tie">E-ranga Document</h4>
+            <p className="card-text text-secondary">
+              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Alias, beatae!
+            </p>
+          </div>
+        </div>
+        </div>
+
+    </div>
+
+
+
+
+
+
   );
 };
 

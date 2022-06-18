@@ -1,4 +1,5 @@
 import React from "react";
+import './header.css'
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { logoutA } from "../redux/Public";
@@ -11,7 +12,7 @@ const Header = () => {
   return (
     <div className="navigation">
       <div className="logo" onClick={() => navigate(navigateTo)}>
-        E-RANGA
+        E-ranga
       </div>
       <nav className="items">
         <ul className="item">
