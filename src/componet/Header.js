@@ -15,7 +15,7 @@ const Header = () => {
       </div>
       <nav className="items">
         <ul className="item">
-          {!publicDoc.isLoggedIn ? (
+          {!publicDoc.isLoggedIn || !location.pathname.includes("admin") ? (
             <>
               <li>
                 <Link className="nav-link" to="./Amatangazo">
