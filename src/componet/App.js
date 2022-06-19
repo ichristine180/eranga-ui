@@ -6,6 +6,7 @@ import "./App.css";
 import Home from "./public/Home";
 import Ibyarangishijwe from "./public/Ibyarangishijwe";
 function App() {
+  localStorage.removeItem("doc");
   return (
     <>
       <Routes>

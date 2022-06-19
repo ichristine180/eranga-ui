@@ -14,11 +14,11 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <Provider store={store}>
   <Router>
-  <Header />
-  <Spinner />
-  <Notification />
-  <App />
-</Router>
+    <Header />
+    <Spinner />
+    <Notification />
+    <App />
+  </Router>
 </Provider>
 );
 reportWebVitals();

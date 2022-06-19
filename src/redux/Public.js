@@ -1,13 +1,13 @@
 import axios from "axios";
 import { createSlice } from "@reduxjs/toolkit";
-const API_URL = "http://192.168.43.107:4001/api"
+// const API_URL = "http://192.168.43.107:4001/api"
+const API_URL = "http://localhost:4001/api";
 // Slice
 const user = JSON.parse(localStorage.getItem("user"));
-const doc = JSON.parse(localStorage.getItem("doc"));
 const slice = createSlice({
   name: "publicDoc",
   initialState: {
-    allfdoc: doc || [],
+    allfdoc: [],
     allLdoc: [],
     fdoc: [],
     ldoc: [],
@@ -107,10 +107,7 @@ export const saveFdoc = (data) => async (dispatch) => {
 export const viewFoundContact = (data) => async (dispatch) => {
   try {
     dispatch(loading(true));
-    const res = await axios.post(
-      `${API_URL}/fdoc/viewContact`,
-      data
-    );
+    const res = await axios.post(`${API_URL}/fdoc/viewContact`, data);
     dispatch(loading(false));
     console.log(res);
     if (!res.data.error)
@@ -193,11 +190,10 @@ export const getAllFdoc = (token) => async (dispatch) => {
     dispatch(loading(true));
     token = token ? token : JSON.parse(localStorage.getItem("user")).token;
     const res = await axios.get(
-      `${API_URL}/fdoc/all?authToken=${token}`
+      `http://localhost:4001/api/fdoc/all?authToken=${token}`
     );
     dispatch(loading(false));
     if (!res.data.error) {
-      localStorage.setItem("doc", JSON.stringify(res.data.result));
       dispatch(fdocAdmin(res.data.result));
     } else dispatch(fail(res.data.message));
   } catch (e) {
@@ -209,10 +205,9 @@ export const reject = (id) => async (dispatch) => {
   try {
     const token = JSON.parse(localStorage.getItem("user")).token;
     dispatch(loading(true));
-    const res = await axios.post(
-      `${API_URL}/fdoc/reject?authToken=${token}`,
-      { id: id }
-    );
+    const res = await axios.post(`${API_URL}/fdoc/reject?authToken=${token}`, {
+      id: id,
+    });
     if (!res.data.error) dispatch(getAllFdoc());
     dispatch(loading(false));
     dispatch(success(res.data.message));
@@ -227,10 +222,10 @@ export const publish = (id) => async (dispatch) => {
   try {
     const token = JSON.parse(localStorage.getItem("user")).token;
     dispatch(loading(true));
-    const res = await axios.post(
-      `${API_URL}/fdoc/update?authToken=${token}`,
-      { id: id, data: { status: "published" } }
-    );
+    const res = await axios.post(`${API_URL}/fdoc/update?authToken=${token}`, {
+      id: id,
+      data: { status: "published" },
+    });
     if (!res.data.error) dispatch(getAllFdoc());
     dispatch(loading(false));
     dispatch(success("Document published successfully"));
@@ -247,9 +242,7 @@ export const getAllLostdoc = () => async (dispatch) => {
   try {
     dispatch(loading(true));
     const token = JSON.parse(localStorage.getItem("user")).token;
-    const res = await axios.get(
-      `${API_URL}/ldoc/all?authToken=${token}`
-    );
+    const res = await axios.get(`${API_URL}/ldoc/all?authToken=${token}`);
     dispatch(loading(false));
     if (!res.data.error) {
       dispatch(ldocAdmin(res.data.result));
@@ -263,10 +256,9 @@ export const rejectLostDoc = (id) => async (dispatch) => {
   try {
     const token = JSON.parse(localStorage.getItem("user")).token;
     dispatch(loading(true));
-    const res = await axios.post(
-      `${API_URL}/ldoc/reject?authToken=${token}`,
-      { id: id }
-    );
+    const res = await axios.post(`${API_URL}/ldoc/reject?authToken=${token}`, {
+      id: id,
+    });
     if (!res.data.error) dispatch(getAllLostdoc());
     dispatch(loading(false));
     dispatch(success(res.data.message));
@@ -281,10 +273,10 @@ export const publishLostDoc = (id) => async (dispatch) => {
   try {
     const token = JSON.parse(localStorage.getItem("user")).token;
     dispatch(loading(true));
-    const res = await axios.post(
-      `${API_URL}/ldoc/update?authToken=${token}`,
-      { id: id, data: { status: "published" } }
-    );
+    const res = await axios.post(`${API_URL}/ldoc/update?authToken=${token}`, {
+      id: id,
+      data: { status: "published" },
+    });
     if (!res.data.error) dispatch(getAllLostdoc());
     dispatch(loading(false));
     dispatch(success("Document published successfully"));
