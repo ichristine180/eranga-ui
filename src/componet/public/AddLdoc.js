@@ -1,13 +1,13 @@
 import { useState } from "react";
 import { Button, Modal } from "react-bootstrap";
 import { useDispatch } from "react-redux";
-import { saveFdoc } from "../redux/Public";
+import { saveLdoc } from  "../../redux/Public";
 
-const AddFdoc = (props) => {
+const AddLdoc = (props) => {
   return (
     <Modal {...props} backdrop="static" keyboard={false}>
       <Modal.Header closeButton>
-        <Modal.Title>Rangisha Ibyangombwa</Modal.Title>
+        <Modal.Title>Tanga Itangazo</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form {...props} />
@@ -17,24 +17,22 @@ const AddFdoc = (props) => {
 };
 
 const Form = (props) => {
-  const [founderFname, setFounderFname] = useState("");
-  const [founderLName, setFounderLname] = useState("");
-  const [founderMobile, setFounderMobile] = useState("");
+  const [ownerMobile, setOwnerMobile] = useState("");
+  const [ownerEmail, setOwnerEmail] = useState("");
   const [ownerFname, setOwnerFname] = useState("");
   const [ownerLName, setOwnerLname] = useState("");
   const [description, setDescription] = useState("");
-  const [docImage, setDocImage] = useState({});
+  const [docName, setDocName] = useState("");
   const [error, setError] = useState("");
   const dispatch = useDispatch();
   const saveHandler = () => {
     save(
-      founderFname,
-      founderLName,
-      founderMobile,
+      ownerEmail,
+      ownerMobile,
+      docName,
       ownerFname,
       ownerLName,
       description,
-      docImage,
       props.onHide,
       setError,
       dispatch
@@ -43,42 +41,6 @@ const Form = (props) => {
   return (
     <>
       <p className="text-danger text-center">{error}</p>
-      <div className="mb-3">
-        <label htmlFor="exampleInputEmail1" className="form-label">
-          First name
-        </label>
-        <input
-          type="text"
-          className="form-control"
-          id="exampleInputEmail1"
-          value={founderFname}
-          onChange={(e) => setFounderFname(e.target.value)}
-        />
-      </div>
-      <div className="mb-3">
-        <label htmlFor="exampleInputEmail1" className="form-label">
-          Last name
-        </label>
-        <input
-          type="text"
-          className="form-control"
-          id="exampleInputEmail1"
-          value={founderLName}
-          onChange={(e) => setFounderLname(e.target.value)}
-        />
-      </div>
-      <div className="mb-3">
-        <label htmlFor="exampleInputEmail1" className="form-label">
-          Phone number
-        </label>
-        <input
-          type="text"
-          className="form-control"
-          id="exampleInputEmail1"
-          value={founderMobile}
-          onChange={(e) => setFounderMobile(e.target.value)}
-        />
-      </div>
       <div className="mb-3">
         <label htmlFor="exampleInputEmail1" className="form-label">
           Owner First name
@@ -91,7 +53,7 @@ const Form = (props) => {
           onChange={(e) => setOwnerFname(e.target.value)}
         />
         <div id="emailHelp" className="form-text">
-          izina ari kubyangombwa watoye.
+          izina ari kubyangombwa wataye.
         </div>
       </div>
       <div className="mb-3">
@@ -106,9 +68,34 @@ const Form = (props) => {
           onChange={(e) => setOwnerLname(e.target.value)}
         />
         <div id="emailHelp" className="form-text">
-          izina ari kubyangombwa watoye.
+          izina ari kubyangombwa wataye.
         </div>
       </div>
+      <div className="mb-3">
+        <label htmlFor="exampleInputEmail1" className="form-label">
+          Owner Phone number
+        </label>
+        <input
+          type="text"
+          className="form-control"
+          id="exampleInputEmail1"
+          value={ownerMobile}
+          onChange={(e) => setOwnerMobile(e.target.value)}
+        />
+      </div>
+      <div className="mb-3">
+        <label htmlFor="exampleInputEmail1" className="form-label">
+          Email
+        </label>
+        <input
+          type="email"
+          className="form-control"
+          id="exampleInputEmail1"
+          value={ownerEmail}
+          onChange={(e) => setOwnerEmail(e.target.value)}
+        />
+      </div>
+
       <div className="mb-3">
         <label htmlFor="exampleInputPassword1" className="form-label">
           Description
@@ -123,15 +110,14 @@ const Form = (props) => {
       </div>
       <div className="mb-3">
         <label htmlFor="exampleInputPassword1" className="form-label">
-          Document Picture
+          Document name
         </label>
         <input
-          //enctype="multipart/form-data"
-          type="file"
+          type="text"
           className="form-control"
           id="exampleInputPassword1"
           onChange={(e) => {
-            setDocImage(e.target.files[0]);
+            setDocName(e.target.value);
           }}
         />
       </div>
@@ -145,40 +131,37 @@ const Form = (props) => {
   );
 };
 
-export default AddFdoc;
+export default AddLdoc;
 
 const save = (
-  founderFname,
-  founderLName,
-  founderMobile,
-  ownerFname,
-  ownerLName,
+  owner_email,
+  owner_mobile,
+  doc_name,
+  owner_first_name,
+  owner_last_name,
   description,
-  docImage,
   onHide,
   setError,
   dispatch
 ) => {
   if (
-    !founderFname ||
-    !founderLName ||
-    !founderMobile ||
-    !ownerFname ||
-    !ownerLName ||
+    !owner_first_name ||
+    !owner_last_name ||
     !description ||
-    !docImage
+    !doc_name ||
+    !owner_email ||
+    !owner_mobile
   )
     setError("All fields are required");
   else {
     dispatch(
-      saveFdoc({
-        doc_image: docImage,
-        founder_first_name: founderFname,
-        founder_last_name: founderLName,
-        found_mobile: founderMobile,
-        description: description,
-        owner_last_name: ownerLName,
-        owner_first_name: ownerFname,
+      saveLdoc({
+        doc_name,
+        owner_first_name,
+        owner_last_name,
+        owner_mobile,
+        description,
+        owner_email,
       })
     );
     onHide();

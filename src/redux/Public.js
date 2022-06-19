@@ -22,6 +22,9 @@ const slice = createSlice({
     fdocAdmin: (state, action) => {
       state.allfdoc = action.payload;
     },
+    ldocAdmin: (state, action) => {
+      state.allLdoc = action.payload;
+    },
     ldocSuccess: (state, action) => {
       state.ldoc = action.payload;
     },
@@ -57,6 +60,8 @@ const {
   logout,
   fdocAdmin,
   clearMessage,
+  ldocSuccess,
+  ldocAdmin,
 } = slice.actions;
 // getting published document
 export const getFdoc = (status) => async (dispatch) => {
@@ -119,6 +124,41 @@ export const viewFoundContact = (data) => async (dispatch) => {
     return console.error(e.message);
   }
 };
+
+/* lost ducument actions */
+// getting published document
+export const getLdoc = () => async (dispatch) => {
+  try {
+    dispatch(loading(true));
+    const res = await axios.post(`http://localhost:4001/api/ldoc/published`);
+    dispatch(loading(false));
+    dispatch(ldocSuccess(res.data.result));
+  } catch (e) {
+    return console.error(e.message);
+  }
+};
+
+export const saveLdoc = (data) => async (dispatch) => {
+  try {
+    dispatch(loading(true));
+    const res = await axios({
+      method: "post",
+      url: "http://localhost:4001/api/ldoc/create",
+      data: data,
+    });
+    dispatch(loading(false));
+    if (!res.data.error)
+      dispatch(
+        success(
+          "Amakuru mutanze abitswe neza Ubishanzwe araza kuyangenzura maze ayemere kujya ahagaragara. Murakoze"
+        )
+      );
+    else dispatch(success(res.data.message));
+  } catch (e) {
+    return console.error(e.message);
+  }
+};
+
 /*admin  actions*/
 export const login =
   ({ email, password }) =>
@@ -191,6 +231,60 @@ export const publish = (id) => async (dispatch) => {
       { id: id, data: { status: "published" } }
     );
     if (!res.data.error) dispatch(getAllFdoc());
+    dispatch(loading(false));
+    dispatch(success("Document published successfully"));
+  } catch (e) {
+    dispatch(success(e.data.message));
+    return console.error(e.message);
+  }
+};
+
+/* lost document */
+
+//  getting all lost document
+export const getAllLostdoc = () => async (dispatch) => {
+  try {
+    dispatch(loading(true));
+    const token = JSON.parse(localStorage.getItem("user")).token;
+    const res = await axios.get(
+      `http://localhost:4001/api/ldoc/all?authToken=${token}`
+    );
+    dispatch(loading(false));
+    if (!res.data.error) {
+      dispatch(ldocAdmin(res.data.result));
+    } else dispatch(fail(res.data.message));
+  } catch (e) {
+    return dispatch(fail(e.message));
+  }
+};
+// deleting rejected document
+export const rejectLostDoc = (id) => async (dispatch) => {
+  try {
+    const token = JSON.parse(localStorage.getItem("user")).token;
+    dispatch(loading(true));
+    const res = await axios.post(
+      `http://localhost:4001/api/ldoc/reject?authToken=${token}`,
+      { id: id }
+    );
+    if (!res.data.error) dispatch(getAllLostdoc());
+    dispatch(loading(false));
+    dispatch(success(res.data.message));
+  } catch (e) {
+    dispatch(success(e.data.message));
+    return console.error(e.message);
+  }
+};
+
+// Publishing  document
+export const publishLostDoc = (id) => async (dispatch) => {
+  try {
+    const token = JSON.parse(localStorage.getItem("user")).token;
+    dispatch(loading(true));
+    const res = await axios.post(
+      `http://localhost:4001/api/ldoc/update?authToken=${token}`,
+      { id: id, data: { status: "published" } }
+    );
+    if (!res.data.error) dispatch(getAllLostdoc());
     dispatch(loading(false));
     dispatch(success("Document published successfully"));
   } catch (e) {

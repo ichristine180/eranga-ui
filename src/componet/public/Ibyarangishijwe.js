@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
-import './Ibyarangishijwe.css'
-import img1 from '../assets/doc.jpg'
+import "./Ibyarangishijwe.css";
 import { useDispatch, useSelector } from "react-redux";
-import { getFdoc, viewFoundContact } from "../redux/Public";
+import { getFdoc, viewFoundContact } from "../../redux/Public";
 import AddFdoc from "./addFdocModal";
 import { Buffer } from "buffer";
 import { Button, Modal } from "react-bootstrap";
-import { validateEmail } from "./admin/login";
+import { validateEmail } from "../admin/login";
 const Ibyarangishijwe = () => {
   const dispatch = useDispatch();
   const publicDoc = useSelector(({ publicDoc }) => publicDoc);
@@ -18,79 +17,44 @@ const Ibyarangishijwe = () => {
     setShow(false);
   };
   return (
-
-    <div className="container-fluid d-flex justify-content-center">        
+    <div className="container-fluid d-flex justify-content-center">
       <div className="col-md-8">
-      <div className="container">
-      <div className="alert alert-primary mt-5">
-        <h4>Incamake kuri E-RANGA</h4>
-        <p>
-          E-ranga ni urubuga ruhuza uwataye ibyangombwa na nyir'i ibyangombwa,
-          aho rwemerera uwabitaye kuba yatanga itangazo, ndetse nuwabitoye kuba
-          yabirangisha. kurangisha icyangombwa yaba kuwagitoye cyangwa uwagitaye
-          nubuntu, ariko kuwateye icyangombwa kugira ngo ubone numero zuwagitoye
-          wishyura amafaranga 1000
-        </p>
-        <hr />
-        <p className="p">
-        E-ranga ni urubuga ruhuza uwataye ibyangombwa na nyir'i ibyangombwa,
-          aho rwemerera uwabitaye kuba yatanga itangazo, ndetse nuwabitoye kuba
-          yabirangisha. kurangisha icyangombwa yaba kuwagitoye cyangwa uwagitaye
-          nubuntu, ariko kuwateye icyangombwa kugira ngo ubone numero zuwagitoye
-          wishyura amafaranga 1000
-        </p>
-        
-        
-        <span className="link" onClick={() => setShow(true)}>
-          {" "}
-          Rangisha
-        </span>
-        <Itangazo />
-      </div>
-      </div>
-      <p className="title">Ibyangombwa byatoraguwe</p>
-      <div className="row">
-        {publicDoc.fdoc &&
-          publicDoc.fdoc.map((item, i) => {
-            return (
-              <React.Fragment key={i}>
-                <Card item={item} />
-              </React.Fragment>
-            );
-          })}
+        <Intro setShow={setShow} />
+        <p className="title">Ibyangombwa byatoraguwe</p>
+        <div className="row">
+          {publicDoc.fdoc &&
+            publicDoc.fdoc.map((item, i) => {
+              return (
+                <React.Fragment key={i}>
+                  <Card item={item} />
+                </React.Fragment>
+              );
+            })}
 
-        {publicDoc.fdoc.length === 0 && (
-          <p className="alert alert-warning">
-            Ntabyangombwa bibashije kuboneka! <Itangazo />
-          </p>
-        )}
+          {publicDoc.fdoc.length === 0 && (
+            <p className="alert alert-warning">
+              Ntabyangombwa bibashije kuboneka! <Itangazo />
+            </p>
+          )}
+        </div>
+        <AddFdoc show={show} onHide={handleClose} />
       </div>
-      <AddFdoc show={show} onHide={handleClose} />
-    </div>
 
-     
-
-        <div className="col-md-4 m-t-50">
-            <div className='card text-center shadow'>
+      {/* <div className="col-md-4 m-t-50">
+        <div className="card text-center shadow">
           <div className="overflow">
-            <img src={img1} alt="Image" className='card-img-top' />
+            <img src={img1} alt="Image" className="card-img-top" />
           </div>
           <div className="car text-dark">
             <h4 className="card-tie">E-ranga Document</h4>
             <p className="card-text text-secondary">
-              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Alias, beatae!
+              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Alias,
+              beatae!
             </p>
           </div>
         </div>
-        </div>
-
+      </div> */}
     </div>
-
-
-
-
-
-
   );
 };
 
@@ -100,7 +64,7 @@ const Card = ({ item }) => {
     imgSrc = new Buffer.from(item.doc_image.data.data).toString("base64");
   const [show, setShow] = useState(false);
   return (
-    <div className="card col-3 mt-5 mx-5">
+    <div className="card col-4   mb-5">
       {imgSrc && (
         <img
           src={`data:image/png;base64,${imgSrc}`}
@@ -109,20 +73,20 @@ const Card = ({ item }) => {
         />
       )}
       <div className="card-body">
-        <h5 className="card-title">
+        <p className="">
           Owner: {item.owner_first_name} {item.owner_last_name}
-        </h5>
+        </p>
         <p className="card-text">{item.description}</p>
-        <button
-          className="btn btn-primary"
-          onClick={() => {
-            setShow(true);
-          }}
-        >
-          {" "}
-          Reba numero zu wabitoye!
-        </button>
       </div>
+      <button
+        className="btn btn-primary"
+        onClick={() => {
+          setShow(true);
+        }}
+      >
+        {" "}
+        Reba numero zu wabitoye!
+      </button>
       <ViewContact show={show} onHide={() => setShow(false)} id={item._id} />
     </div>
   );
@@ -200,12 +164,12 @@ const ViewContact = (props) => {
   );
 };
 
-const Itangazo = (props) => {
+export const Itangazo = (props) => {
   return (
     <span
       className="link"
       onClick={() => {
-        console.log("got here");
+        props.setShow && props.setShow(true);
       }}
     >
       {" "}
@@ -230,3 +194,28 @@ const validate = (mobile, email, setError) => {
   return false;
 };
 export default Ibyarangishijwe;
+export const Intro = ({ setShow,title }) => {
+  return (
+    <div className="container">
+      <div className="alert alert-primary mt-5">
+        <h4>Incamake kuri E-RANGA</h4>
+        <p>
+          E-ranga ni urubuga ruhuza uwataye ibyangombwa na nyir'i ibyangombwa,
+          aho rwemerera uwabitaye kuba yatanga itangazo, ndetse nuwabitoye kuba
+          yabirangisha. kurangisha icyangombwa yaba kuwagitoye cyangwa uwagitaye
+          nubuntu, ariko kuwateye icyangombwa kugira ngo ubone numero zuwagitoye
+          wishyura amafaranga 1000
+        </p>
+        <hr />
+        <p className="p"></p>
+
+        {setShow && (
+          <span className="link" onClick={() => setShow(true)}>
+            {" "}
+            {title || "Rangisha"}
+          </span>
+        )}
+      </div>
+    </div>
+  );
+};

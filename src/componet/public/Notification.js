@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Modal } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { clear } from "../redux/Public";
+import { clear } from  "../../redux/Public";
 
 const Notification = () => {
   const dispatch = useDispatch();

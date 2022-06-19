@@ -24,6 +24,11 @@ const Header = () => {
                 </Link>
               </li>
               <li>
+                <Link className="nav-link" to="./ibyarangishijwe">
+                  Ibyabonetse
+                </Link>
+              </li>
+              <li>
                 <Link className="nav-link" to="admin">
                   Admin
                 </Link>
