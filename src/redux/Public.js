@@ -1,5 +1,6 @@
 import axios from "axios";
 import { createSlice } from "@reduxjs/toolkit";
+const API_URL = "http://192.168.43.107:4001/api"
 // Slice
 const user = JSON.parse(localStorage.getItem("user"));
 const doc = JSON.parse(localStorage.getItem("doc"));
@@ -67,7 +68,7 @@ const {
 export const getFdoc = (status) => async (dispatch) => {
   try {
     dispatch(loading(true));
-    const res = await axios.post(`http://localhost:4001/api/fdoc/getByStatus`, {
+    const res = await axios.post(`${API_URL}/fdoc/getByStatus`, {
       status,
     });
     dispatch(loading(false));
@@ -85,7 +86,7 @@ export const saveFdoc = (data) => async (dispatch) => {
     dispatch(loading(true));
     const res = await axios({
       method: "post",
-      url: "http://localhost:4001/api/fdoc/create",
+      url: `${API_URL}/fdoc/create`,
       data: data,
       headers: { "Content-Type": "multipart/form-data" },
     });
@@ -107,7 +108,7 @@ export const viewFoundContact = (data) => async (dispatch) => {
   try {
     dispatch(loading(true));
     const res = await axios.post(
-      `http://localhost:4001/api/fdoc/viewContact`,
+      `${API_URL}/fdoc/viewContact`,
       data
     );
     dispatch(loading(false));
@@ -130,7 +131,7 @@ export const viewFoundContact = (data) => async (dispatch) => {
 export const getLdoc = () => async (dispatch) => {
   try {
     dispatch(loading(true));
-    const res = await axios.post(`http://localhost:4001/api/ldoc/published`);
+    const res = await axios.post(`${API_URL}/ldoc/published`);
     dispatch(loading(false));
     dispatch(ldocSuccess(res.data.result));
   } catch (e) {
@@ -143,7 +144,7 @@ export const saveLdoc = (data) => async (dispatch) => {
     dispatch(loading(true));
     const res = await axios({
       method: "post",
-      url: "http://localhost:4001/api/ldoc/create",
+      url: `${API_URL}/ldoc/create`,
       data: data,
     });
     dispatch(loading(false));
@@ -165,7 +166,7 @@ export const login =
   async (dispatch) => {
     try {
       dispatch(loading(true));
-      const res = await axios.post(`http://localhost:4001/api/login`, {
+      const res = await axios.post(`${API_URL}/login`, {
         email,
         password,
       });
@@ -192,7 +193,7 @@ export const getAllFdoc = (token) => async (dispatch) => {
     dispatch(loading(true));
     token = token ? token : JSON.parse(localStorage.getItem("user")).token;
     const res = await axios.get(
-      `http://localhost:4001/api/fdoc/all?authToken=${token}`
+      `${API_URL}/fdoc/all?authToken=${token}`
     );
     dispatch(loading(false));
     if (!res.data.error) {
@@ -209,7 +210,7 @@ export const reject = (id) => async (dispatch) => {
     const token = JSON.parse(localStorage.getItem("user")).token;
     dispatch(loading(true));
     const res = await axios.post(
-      `http://localhost:4001/api/fdoc/reject?authToken=${token}`,
+      `${API_URL}/fdoc/reject?authToken=${token}`,
       { id: id }
     );
     if (!res.data.error) dispatch(getAllFdoc());
@@ -227,7 +228,7 @@ export const publish = (id) => async (dispatch) => {
     const token = JSON.parse(localStorage.getItem("user")).token;
     dispatch(loading(true));
     const res = await axios.post(
-      `http://localhost:4001/api/fdoc/update?authToken=${token}`,
+      `${API_URL}/fdoc/update?authToken=${token}`,
       { id: id, data: { status: "published" } }
     );
     if (!res.data.error) dispatch(getAllFdoc());
@@ -247,7 +248,7 @@ export const getAllLostdoc = () => async (dispatch) => {
     dispatch(loading(true));
     const token = JSON.parse(localStorage.getItem("user")).token;
     const res = await axios.get(
-      `http://localhost:4001/api/ldoc/all?authToken=${token}`
+      `${API_URL}/ldoc/all?authToken=${token}`
     );
     dispatch(loading(false));
     if (!res.data.error) {
@@ -263,7 +264,7 @@ export const rejectLostDoc = (id) => async (dispatch) => {
     const token = JSON.parse(localStorage.getItem("user")).token;
     dispatch(loading(true));
     const res = await axios.post(
-      `http://localhost:4001/api/ldoc/reject?authToken=${token}`,
+      `${API_URL}/ldoc/reject?authToken=${token}`,
       { id: id }
     );
     if (!res.data.error) dispatch(getAllLostdoc());
@@ -281,7 +282,7 @@ export const publishLostDoc = (id) => async (dispatch) => {
     const token = JSON.parse(localStorage.getItem("user")).token;
     dispatch(loading(true));
     const res = await axios.post(
-      `http://localhost:4001/api/ldoc/update?authToken=${token}`,
+      `${API_URL}/ldoc/update?authToken=${token}`,
       { id: id, data: { status: "published" } }
     );
     if (!res.data.error) dispatch(getAllLostdoc());
